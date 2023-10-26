@@ -16,13 +16,13 @@ class StylePropertyAll(TypedDict):
     BoldItalic: StyleProperty
 
 
-FAMILY = "PleckJP"
-VERSION = "1.1.0"
+FAMILY = "AgaveJP"
+VERSION = ""
 ENCODING = 'UnicodeFull'
 
 COPYRIGHT = "\n".join([
-    "[Hack]",
-    "Copyright (c) 2018 Source Foundry Authors",
+    "[Agave]",
+    "(c) 2013-2021, type agaric <agaric@protonmail.com>",
     "",
     "[IBM Plex]",
     "Copyright © 2017 IBM Corp.",

@@ -29,11 +29,11 @@ def main() -> None:
     # TODO: Create glyph
     # 0x226a: ≪
     # 0x226b: ≫
-    fix_subscript_numbers(font)
-    create_up_tack(font)
+    #fix_subscript_numbers(font)
+    #create_up_tack(font)
 
-    modify_0(font)
-    modify_m(font)
+    #modify_0(font)
+    #modify_m(font)
 
     util.fix_all_glyph_points(font, round=True)
     util.font_into_file(font, BUILD_FILE)

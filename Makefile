@@ -31,8 +31,8 @@ release:
 	@cp LICENSE build/
 	@version=$$(python -c "import src.fontforge_.properties as p; print(p.VERSION, end='')") && \
 		cd build && \
-		zip -r PleckJP_v$$version.zip * && \
-		shasum -a 256 PleckJP_v$$version.zip | awk '{print $$1}' > PleckJP_v$$version.sha256
+		zip -r AgaveJP_v$$version.zip * && \
+		shasum -a 256 AgaveJP_v$$version.zip | awk '{print $$1}' > AgaveJP_v$$version.sha256
 	@rm build/LICENSE
 
 .PHONY: clean
@@ -41,22 +41,22 @@ clean:
 	@rm -rf $(CACHE_DIR) $(BUILD_DIR)
 
 .PHONY: fontforge
-fontforge: $(CACHE_DIR) $(addprefix $(CACHE_DIR)/PleckJP-, $(addsuffix .ttf, $(FONT_STYLES)))
+fontforge: $(CACHE_DIR) $(addprefix $(CACHE_DIR)/AgaveJP-, $(addsuffix .ttf, $(FONT_STYLES)))
 	@echo "Completed: fontforge"
 
 .PHONY: fonttools
-fonttools: $(BUILD_DIR) $(addprefix $(BUILD_DIR)/PleckJP-, $(addsuffix .ttf, $(FONT_STYLES)))
+fonttools: $(BUILD_DIR) $(addprefix $(BUILD_DIR)/AgaveJP-, $(addsuffix .ttf, $(FONT_STYLES)))
 	@echo "Completed: fonttools"
 
 # Do not renove intermediate TTF files
 .SECONDARY: $(wildcard *.ttf)
 
 # Fix by Fonttools
-$(BUILD_DIR)/PleckJP-%.ttf: $(CACHE_DIR)/PleckJP-%.ttf $(FONTTOOLS_SCRIPT)
+$(BUILD_DIR)/AgaveJP-%.ttf: $(CACHE_DIR)/AgaveJP-%.ttf $(FONTTOOLS_SCRIPT)
 	@python3 $(FONTTOOLS_SCRIPT) $< $(CACHE_DIR) $@ 2>> $(ERROR_LOG_FILE)
 
 # Patch
-$(CACHE_DIR)/PleckJP-%.ttf: $(CACHE_DIR)/merged-PleckJP-%.ttf $(CACHE_DIR)/NerdFonts.ttf $(CACHE_DIR)/Braille.ttf $(PATCH_SCRIPT)
+$(CACHE_DIR)/AgaveJP-%.ttf: $(CACHE_DIR)/merged-AgaveJP-%.ttf $(CACHE_DIR)/NerdFonts.ttf $(CACHE_DIR)/Braille.ttf $(PATCH_SCRIPT)
 	@python3 $(PATCH_SCRIPT) $< $(word 2, $^) $(word 3, $^) $@ 2>> $(ERROR_LOG_FILE)
 
 # Generate patch glyphs
@@ -67,20 +67,20 @@ $(CACHE_DIR)/Braille.ttf: $(BRAILLE_GEN_SCRIPT)
 	@python3 $(BRAILLE_GEN_SCRIPT) $@ 2>> $(ERROR_LOG_FILE)
 
 # Merge base fonts
-$(CACHE_DIR)/merged-PleckJP-Regular.ttf: $(CACHE_DIR)/modified-Hack-Regular.ttf $(CACHE_DIR)/modified-IBMPlexSansJP-Regular.ttf $(MERGE_SCRIPT)
+$(CACHE_DIR)/merged-AgaveJP-Regular.ttf: $(CACHE_DIR)/modified-Hack-Regular.ttf $(CACHE_DIR)/modified-IBMPlexSansJP-Medium.ttf $(MERGE_SCRIPT)
 	@python3 $(MERGE_SCRIPT) $(word 1, $^) $(word 2, $^) Regular $@ 2>> $(ERROR_LOG_FILE)
 
-$(CACHE_DIR)/merged-PleckJP-Bold.ttf: $(CACHE_DIR)/modified-Hack-Bold.ttf $(CACHE_DIR)/modified-IBMPlexSansJP-Bold.ttf $(MERGE_SCRIPT)
+$(CACHE_DIR)/merged-AgaveJP-Bold.ttf: $(CACHE_DIR)/modified-Hack-Bold.ttf $(CACHE_DIR)/modified-IBMPlexSansJP-Bold.ttf $(MERGE_SCRIPT)
 	@python3 $(MERGE_SCRIPT) $(word 1, $^) $(word 2, $^) Bold $@ 2>> $(ERROR_LOG_FILE)
 
-$(CACHE_DIR)/merged-PleckJP-Italic.ttf: $(CACHE_DIR)/modified-Hack-Regular.ttf $(CACHE_DIR)/modified-IBMPlexSansJP-Regular.ttf $(MERGE_SCRIPT)
+$(CACHE_DIR)/merged-AgaveJP-Italic.ttf: $(CACHE_DIR)/modified-Hack-Regular.ttf $(CACHE_DIR)/modified-IBMPlexSansJP-Medium.ttf $(MERGE_SCRIPT)
 	@python3 $(MERGE_SCRIPT) $(word 1, $^) $(word 2, $^) Italic $@ 2>> $(ERROR_LOG_FILE)
 
-$(CACHE_DIR)/merged-PleckJP-BoldItalic.ttf: $(CACHE_DIR)/modified-Hack-Bold.ttf $(CACHE_DIR)/modified-IBMPlexSansJP-Bold.ttf $(MERGE_SCRIPT)
+$(CACHE_DIR)/merged-AgaveJP-BoldItalic.ttf: $(CACHE_DIR)/modified-Hack-Bold.ttf $(CACHE_DIR)/modified-IBMPlexSansJP-Bold.ttf $(MERGE_SCRIPT)
 	@python3 $(MERGE_SCRIPT) $(word 1, $^) $(word 2, $^) BoldItalic $@ 2>> $(ERROR_LOG_FILE)
 
 # Modify base fonts
-$(CACHE_DIR)/modified-Hack-%.ttf: $(GLYPHS_DIR)/Hack-%.ttf $(MODIFY_HACK_SCRIPT)
+$(CACHE_DIR)/modified-Hack-%.ttf: $(GLYPHS_DIR)/Agave-%.ttf $(MODIFY_HACK_SCRIPT)
 	@python3 $(MODIFY_HACK_SCRIPT) $< $@ 2>> $(ERROR_LOG_FILE)
 
 $(CACHE_DIR)/modified-IBMPlexSansJP-%.ttf: $(GLYPHS_DIR)/IBMPlexSansJP-%.ttf $(MODIFY_IBMPLEX_SCRIPT)
